@@ -55,7 +55,7 @@ class GroupInvite(commands.Cog):
             return
 
         embed = discord.Embed(
-            title=f"📌 {target_channel.name}",
+            title=f"📌 リアクションを押して {target_channel.name} に参加する",
             description=description,
         )
         message = await interaction.channel.send(embed=embed)

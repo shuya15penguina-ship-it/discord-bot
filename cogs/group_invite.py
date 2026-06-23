@@ -55,8 +55,8 @@ class GroupInvite(commands.Cog):
             return
 
         embed = discord.Embed(
-            title="📌 グループ参加",
-            description=description or f"{emoji} のリアクションで参加できます。",
+            title=f"📌 {target_channel.name}",
+            description=description,
         )
         message = await interaction.channel.send(embed=embed)
         try:
@@ -89,7 +89,11 @@ class GroupInvite(commands.Cog):
         if not mine:
             await interaction.response.send_message("設定されているグループはありません。", ephemeral=True)
             return
-        lines = [f"・{g['emoji']} | message_id: {g['message_id']}" for g in mine]
+        lines = []
+        for g in mine:
+            channel = interaction.guild.get_channel(g["target_channel_id"])
+            channel_text = channel.name if channel else "(削除済みチャンネル)"
+            lines.append(f"・{channel_text} | {g['emoji']} | message_id: {g['message_id']}")
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
     @app_commands.command(name="group_delete", description="グループ設定を削除します")
@@ -130,7 +134,7 @@ class GroupInvite(commands.Cog):
             await target_channel.set_permissions(
                 payload.member, view_channel=True, send_messages=True, read_message_history=True
             )
-            await target_channel.send(f"{payload.member.mention} さんが参加しました。")
+            await target_channel.send(f"{payload.member.mention} さんが「{target_channel.name}」に参加しました。")
         except discord.Forbidden:
             pass
 

@@ -43,7 +43,7 @@ class GroupInvite(commands.Cog):
         interaction: discord.Interaction,
         target_channel: discord.TextChannel,
         emoji: str,
-        description: str = "",
+        description: str,
     ):
         bot_member = interaction.guild.me
         perms = target_channel.permissions_for(bot_member)
